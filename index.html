@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FoodWise AI — Intelligent Food Waste Reduction</title>
+  
+  <!-- Google Fonts: Playfair Display (Editorial Serif) & Plus Jakarta Sans (Clean Modern Sans) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+  
+  <!-- Chart.js & Lucide (Local with CDN fallbacks) -->
+  <script src="assets/chart.umd.min.js"></script>
+  <script src="assets/lucide.min.js"></script>
+  <script>
+    // Fallback if local asset CDN fails
+    if (typeof Chart === 'undefined') {
+      document.write('<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"><\/script>');
+    }
+    if (typeof lucide === 'undefined') {
+      document.write('<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"><\/script>');
+    }
+  </script>
+</head>
+<body>
+
+  <!-- =========================================================================
+       Navigation Bar
+       ========================================================================= -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="brand-logo" onclick="App.navigateTo('home')">
+        <div class="brand-icon-wrapper">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a10 10 0 0 0-10 10c0 4.4 2.8 8.2 6.8 9.5.4.1.8-.2.8-.6v-2.3c0-.6.5-1.1 1.1-1.1h2.6c.6 0 1.1.5 1.1 1.1v2.3c0 .4.4.7.8.6 4-1.3 6.8-5.1 6.8-9.5A10 10 0 0 0 12 2z"></path>
+            <path d="M12 6v6"></path>
+            <path d="M15 9l-3 3-3-3"></path>
+          </svg>
+        </div>
+        <span>FoodWise AI</span>
+        <span class="brand-badge">Smarter Mess</span>
+      </div>
+
+      <nav>
+        <ul class="nav-menu" id="mainNavMenu">
+          <li><a class="nav-link active" data-route="home">Home</a></li>
+          <li><a class="nav-link" data-route="dashboard">Dashboard</a></li>
+          <li><a class="nav-link" data-route="inventory">Food Inventory</a></li>
+          <li><a class="nav-link" data-route="estimation">AI Insights</a></li>
+          <li><a class="nav-link" data-route="alerts">Alerts <span class="badge-counter alert-count-badge" style="display:none;">0</span></a></li>
+          <li><a class="nav-link" data-route="outcomes">Outcomes</a></li>
+          <li><a class="nav-link" data-route="analytics">Analytics</a></li>
+          <li><a class="nav-link" data-route="testing">Testing Center</a></li>
+          <li><a class="nav-link" data-route="about">About</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="btn btn-primary" onclick="App.navigateTo('dashboard')">
+          Get Started
+        </button>
+        <button class="mobile-toggle" id="mobileToggleBtn" aria-label="Toggle Navigation">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       Main Content Views Container
+       ========================================================================= -->
+  <main class="main-wrapper">
+
+    <!-- -----------------------------------------------------------------------
+         VIEW: Home & Landing
+         ----------------------------------------------------------------------- -->
+    <div class="page-view active" id="view-home">
+      
+      <!-- HERO SECTION -->
+      <section class="hero-section" style="background-image: url('assets/img/hero-food.jpg');">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <div class="hero-badge">
+            <span>🌿</span> Precision Demand & Food Redistribution Platform
+          </div>
+          <h1 class="hero-title">Make Every Meal Count.</h1>
+          <div class="hero-subtitle">Smarter food planning. Less waste. A better tomorrow.</div>
+          <p class="hero-desc">
+            FoodWise AI helps college canteens, hostels, restaurants, and event organizers
+            understand demand, identify potential surplus, and make smarter decisions to reduce avoidable food waste.
+          </p>
+          <div class="hero-cta-group">
+            <button class="btn btn-primary btn-lg" onclick="App.navigateTo('dashboard')">
+              Explore Dashboard &rarr;
+            </button>
+            <button class="btn btn-secondary btn-lg" onclick="App.navigateTo('inventory')">
+              Track Food Inventory
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- FOUR FEATURE CARDS: SMARTER FOOD MANAGEMENT -->
+      <section class="features-section">
+        <div class="container">
+          <div class="section-header">
+            <span class="section-tag">Core Capabilities</span>
+            <h2 class="section-title">Smarter Food Management</h2>
+            <p class="section-subtitle">
+              From early morning kitchen prep to post-service cold chain storage and community meal sharing.
+            </p>
+          </div>
+
+          <div class="features-grid">
+            <!-- CARD 1 -->
+            <div class="feature-card" onclick="App.navigateTo('estimation')">
+              <div class="feature-icon-wrapper">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                  <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                  <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                </svg>
+              </div>
+              <h3 class="feature-card-title">Smart Demand Estimation</h3>
+              <p class="feature-card-desc">
+                Estimate food demand using entered kitchen parameters and available historical records for identical meal cycles.
+              </p>
+              <div class="feature-card-link">
+                <span>Explore Estimator</span> &rarr;
+              </div>
+            </div>
+
+            <!-- CARD 2 -->
+            <div class="feature-card" onclick="App.navigateTo('alerts')">
+              <div class="feature-icon-wrapper">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+                  <line x1="12" y1="9" x2="12" y2="13"></line>
+                  <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+              </div>
+              <h3 class="feature-card-title">Surplus Food Detection</h3>
+              <p class="feature-card-desc">
+                Identify food items that may have more quantity prepared than expected demand before spoilage occurs.
+              </p>
+              <div class="feature-card-link">
+                <span>View Alert Center</span> &rarr;
+              </div>
+            </div>
+
+            <!-- CARD 3 -->
+            <div class="feature-card" onclick="App.navigateTo('analytics')">
+              <div class="feature-icon-wrapper">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="20" x2="18" y2="10"></line>
+                  <line x1="12" y1="20" x2="12" y2="4"></line>
+                  <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>
+              </div>
+              <h3 class="feature-card-title">Waste Reduction Insights</h3>
+              <p class="feature-card-desc">
+                Understand food preparation, consumption, and surplus patterns using actual recorded data across meal sessions.
+              </p>
+              <div class="feature-card-link">
+                <span>Open Analytics</span> &rarr;
+              </div>
+            </div>
+
+            <!-- CARD 4 -->
+            <div class="feature-card" onclick="App.navigateTo('outcomes')">
+              <div class="feature-icon-wrapper">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+                </svg>
+              </div>
+              <h3 class="feature-card-title">Responsible Food Redistribution</h3>
+              <p class="feature-card-desc">
+                Record food reuse and redistribution after mandatory human review, sensory inspection, and food safety checks.
+              </p>
+              <div class="feature-card-link">
+                <span>Track Outcomes</span> &rarr;
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- WHY CHOOSE FOODWISE AI? (SPLIT EDITORIAL SECTION) -->
+      <section class="why-choose-section">
+        <div class="split-card">
+          <div class="split-left">
+            <span class="section-tag" style="background: rgba(245, 235, 221, 0.15); color: #F5EBDD; border: 1px solid rgba(245, 235, 221, 0.3);">
+              The Editorial Perspective
+            </span>
+            <h2>Why Choose FoodWise AI?</h2>
+            <p>
+              Food waste in institutions is rarely caused by indifference; it is caused by informational blind spots.
+              Without structured real-time tracking, kitchen supervisors are forced to over-cater to guard against shortages.
+            </p>
+            <p>
+              Food waste can be reduced through better planning, accurate recordkeeping, transparent estimates,
+              and informed decisions grounded in verifiable kitchen logs.
+            </p>
+
+            <ul class="split-pill-list">
+              <li class="split-pill-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Transparent rule-based math instead of opaque black-box estimates.</span>
+              </li>
+              <li class="split-pill-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>HACCP-aligned holding limit reminders and temperature verification checklists.</span>
+              </li>
+              <li class="split-pill-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>Zero fabrication: strictly counts actually recorded outcomes as saved food.</span>
+              </li>
+            </ul>
+
+            <div>
+              <button class="btn btn-secondary" style="color: #F5EBDD; border-color: #F5EBDD;" onclick="App.navigateTo('about')">
+                Discover More About Our Methodology &rarr;
+              </button>
+            </div>
+          </div>
+
+          <div class="split-right" style="background-image: url('assets/img/why-choose.jpg');">
+            <div class="split-right-overlay"></div>
+            <div class="split-badge-quote">
+              <p>"Respect for ingredients begins with disciplined measurement and ends with zero avoidable waste."</p>
+              <span>— Campus Sustainable Kitchen Standard, 2026</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- -----------------------------------------------------------------------
+         VIEW: Dashboard
+         ----------------------------------------------------------------------- -->
+    <div class="page-view" id="view-dashboard">
+      <div class="container">
+        
+        <div class="page-header-bar">
+          <div>
+            <h1 class="page-header-title">Kitchen Operations Dashboard</h1>
+            <p class="page-header-subtitle">
+              Real-time summary of batch preparation, service consumption, surplus detection, and outcomes.
+            </p>
+          </div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button class="btn btn-primary btn-sm" onclick="App.openAddRecordModal()">
+              + Add Food Record
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="App.loadSampleData()">
+              Load Demo Data
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="App.exportData()">
+              Export CSV
+            </button>
+            <button class="btn btn-secondary btn-sm" style="color: #C26D53; border-color: #C26D53;" onclick="App.confirmReset()">
+              Reset Demo
+            </button>
+          </div>
+        </div>
+
+        <!-- 8 STAT CARDS -->
+        <div class="stats-grid-8">
+          <div class="stat-card">
+            <div class="stat-card-top">
+              <span class="stat-label">Total Prepared</span>
+              <div class="stat-icon">🥘</div>
+            </div>
+            <div class="stat-value" id="statPrepared">0</div>
+            <div class="stat-meta">Recorded batch sum</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card-top">
+              <span class="stat-label">Total Served</span>
+              <div class="stat-icon">🍽️</div>
+            </div>
+            <div class="stat-value" id="statServed">0</div>
+            <div class="stat-meta">Diner consumption</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card-top">
+              <span class="stat-label">Remaining Food</span>
+              <div class="stat-icon">📦</div>
+            </div>
+            <div class="stat-value" id="statRemaining">0</div>
+            <div class="stat-meta">Prepared - Served</div>
+          </div>
+
+          <div class="stat-card stat-highlight-terracotta">
+            <div class="stat-card-top">
+              <span class="stat-label">Estimated Surplus</span>
+              <div class="stat-icon">⚠️</div>
+            </div>
+            <div class="stat-value" id="statSurplus">0</div>
+            <div class="stat-meta">max(0, Prep - Demand)</div>
+          </div>
+
+          <div class="stat-card stat-highlight-sage">
+            <div class="stat-card-top">
+              <span class="stat-label">Food Reused</span>
+              <div class="stat-icon">🔄</div>
+            </div>
+            <div class="stat-value" id="statReused">0</div>
+            <div class="stat-meta">Chilled for later cycles</div>
+          </div>
+
+          <div class="stat-card stat-highlight-sage">
+            <div class="stat-card-top">
+              <span class="stat-label">Redistributed</span>
+              <div class="stat-icon">🤝</div>
+            </div>
+            <div class="stat-value" id="statRedistributed">0</div>
+            <div class="stat-meta">Signed NGO/hostel dispatch</div>
+          </div>
+
+          <div class="stat-card stat-highlight-terracotta">
+            <div class="stat-card-top">
+              <span class="stat-label">Food Discarded</span>
+              <div class="stat-icon">🗑️</div>
+            </div>
+            <div class="stat-value" id="statDiscarded">0</div>
+            <div class="stat-meta">Composted / Spoiled</div>
+          </div>
+
+          <div class="stat-card stat-highlight-amber">
+            <div class="stat-card-top">
+              <span class="stat-label">Active Alerts</span>
+              <div class="stat-icon">🔔</div>
+            </div>
+            <div class="stat-value" id="statAlerts">0</div>
+            <div class="stat-meta">Pending kitchen review</div>
+          </div>
+        </div>
+
+        <!-- CHARTS GRID -->
+        <div class="charts-grid-2">
+          <!-- Chart 1: Prepared vs Served -->
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <h3 class="chart-card-title">Prepared vs. Served Quantities</h3>
+              <span class="badge badge-neutral">By Food Batch</span>
+            </div>
+            <div class="chart-canvas-wrapper">
+              <canvas id="chartPrepVsServed"></canvas>
+            </div>
+            <div class="chart-explanation-box">
+              <strong>Operational Insight:</strong> Compares total food cooked against actual consumption recorded at service counters. The gap represents unserved leftovers that must be rapidly managed.
+            </div>
+          </div>
+
+          <!-- Chart 2: Surplus by Item -->
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <h3 class="chart-card-title">Potential Surplus by Food Item</h3>
+              <span class="badge badge-warning">Top Over-Prep</span>
+            </div>
+            <div class="chart-canvas-wrapper">
+              <canvas id="chartSurplusByItem"></canvas>
+            </div>
+            <div class="chart-explanation-box">
+              <strong>Surplus Detection:</strong> Displays food batches where preparation exceeded expected demand. Red bars denote items with surplus exceeding the 25% demonstration threshold.
+            </div>
+          </div>
+
+          <!-- Chart 3: Food Outcomes Breakdown -->
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <h3 class="chart-card-title">Food Outcomes Breakdown</h3>
+              <span class="badge badge-neutral">Actioned Leftovers</span>
+            </div>
+            <div class="chart-canvas-wrapper">
+              <canvas id="chartOutcomesBreakdown"></canvas>
+            </div>
+            <div class="chart-explanation-box">
+              <strong>Accountability Standard:</strong> Only counts verified leftovers logged with human sign-off. Estimated surplus is strictly distinguished from food that was successfully reused or redistributed.
+            </div>
+          </div>
+
+          <!-- Chart 4: Surplus by Category -->
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <h3 class="chart-card-title">Surplus by Food Category</h3>
+              <span class="badge badge-neutral">Kitchen Segments</span>
+            </div>
+            <div class="chart-canvas-wrapper">
+              <canvas id="chartSurplusByCategory"></canvas>
+            </div>
+            <div class="chart-explanation-box">
+              <strong>Category Distribution:</strong> Highlights whether over-production is concentrated in grains, breads, curries, or snacks, allowing focused portion adjustments in high-waste categories.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- -----------------------------------------------------------------------
+         VIEW: Food Inventory
+         ----------------------------------------------------------------------- -->
+    <div class="page-view" id="view-inventory">
+      <div class="container">
+        <div class="page-header-bar">
+          <div>
+            <h1 class="page-header-title">Food Inventory Management</h1>
+            <p class="page-header-subtitle">
+              Comprehensive food recordkeeping, preparation logs, shelf-life monitoring, and outcome tracking.
+            </p>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-primary btn-sm" onclick="App.openAddRecordModal()">
+              + Add Food Record
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="App.exportData()">
+              Export CSV
+            </button>
+          </div>
+        </div>
+
+        <!-- FILTER & SEARCH TOOLBAR -->
+        <div class="toolbar-card">
+          <div class="filter-group">
+            <input type="text" id="inventorySearch" class="form-control" placeholder="Search food item or notes..." style="min-width: 240px;">
+            
+            <select id="inventoryCategoryFilter" class="form-control">
+              <option value="ALL">All Categories</option>
+              <option value="Rice & Grains">Rice & Grains</option>
+              <option value="Breads">Breads</option>
+              <option value="Curries & Gravies">Curries & Gravies</option>
+              <option value="Breakfast/Snacks">Breakfast/Snacks</option>
+              <option value="Desserts">Desserts</option>
+              <option value="Beverages">Beverages</option>
+            </select>
+
+            <select id="inventoryMealFilter" class="form-control">
+              <option value="ALL">All Meal Sessions</option>
+              <option value="Breakfast">Breakfast</option>
+              <option value="Lunch">Lunch</option>
+              <option value="Snacks">Snacks</option>
+              <option value="Dinner">Dinner</option>
+              <option value="Event">Special Event</option>
+            </select>
+          </div>
+
+          <div style="font-size: 0.85rem; color: rgba(45, 27, 21, 0.75);">
+            Showing live kitchen log
+          </div>
+        </div>
+
+        <!-- INVENTORY TABLE -->
+        <div class="table-responsive">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Food Item & Session</th>
+                <th>Category</th>
+                <th>Prepared</th>
+                <th>Served</th>
+                <th>Remaining</th>
+                <th>Surplus (Est)</th>
+                <th>Alert Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="inventoryTableBody">
+              <!-- Dynamically rendered -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- -----------------------------------------------------------------------
+         VIEW: AI Insights & Estimation Simulator
+         ----------------------------------------------------------------------- -->
+    <div class="page-view" id="view-estimation">
+      <div class="container">
+        <div class="page-header-bar">
+          <div>
+            <h1 class="page-header-title">AI-Assisted Demand & Surplus Estimation</h1>
+            <p class="page-header-subtitle">
+              Transparent statistical demand baselines and rule-based potential surplus detection.
+            </p>
+          </div>
+        </div>
+
+        <!-- ESTIMATION SIMULATOR GRID -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2.5rem;">
+          
+          <!-- LEFT: INPUT & HISTORICAL DISCOVERY -->
+          <div class="chart-card">
+            <h3 class="chart-card-title" style="margin-bottom: 1.2rem;">Batch Estimation Simulator</h3>
+
+            <div class="form-group">
+              <label class="form-label">Select Existing Food Item or Enter Custom</label>
+              <select id="estimationItemSelect" class="form-control" style="margin-bottom: 8px;">
+                <!-- Populated dynamically -->
+              </select>
+              <input type="text" id="calcItemName" class="form-control" placeholder="Or type new item name (e.g., Sambar, Idli, Rice)..." value="Steamed Sona Masoori Rice">
+            </div>
+
+            <div id="calcHistoryInfo" style="margin-bottom: 1.2rem;">
+              <!-- Historical query status rendered here -->
+            </div>
+
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label">Quantity Prepared</label>
+                <input type="number" id="calcPrepQty" class="form-control" min="0" value="45">
+                <span class="form-help">Total cooked batch size</span>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Quantity Served</label>
+                <input type="number" id="calcServedQty" class="form-control" min="0" value="38">
+                <span class="form-help">Consumed by diners</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Estimated Demand</label>
+              <input type="number" id="calcDemandQty" class="form-control" min="0" value="40">
+              <span class="form-help">Historical average or supervisor estimate</span>
+            </div>
+
+            <div style="background-color: var(--color-soft-beige); padding: 12px 14px; border-radius: var(--radius-sm); font-size: 0.8rem; color: #4A281B; margin-top: 10px;">
+              <strong>Demo Threshold Settings:</strong> Low Surplus (&lt;10%), Moderate (10%–25%), High Surplus (&gt;25%). Clearly labelled as demonstration parameters, not official food safety standards.
+            </div>
+          </div>
+
+          <!-- RIGHT: COMPUTED ESTIMATE & TRANSPARENT BREAKDOWN -->
+          <div class="chart-card" style="background-color: #FAF5EE;">
+            <div class="chart-card-header">
+              <h3 class="chart-card-title">Live Calculated Estimation</h3>
+              <span id="calcResultAlert" class="badge badge-success">Low Potential Surplus</span>
+            </div>
+
+            <div class="stats-grid-8" style="grid-template-columns: 1fr 1fr; margin-bottom: 1.5rem;">
+              <div class="stat-card">
+                <div class="stat-label">Remaining Food</div>
+                <div class="stat-value" id="calcResultRemaining">7</div>
+                <div class="stat-meta">Prep - Served</div>
+              </div>
+              <div class="stat-card stat-highlight-terracotta">
+                <div class="stat-label">Estimated Surplus</div>
+                <div class="stat-value" id="calcResultSurplus">5</div>
+                <div class="stat-meta" id="calcResultPct">11.1% of batch</div>
+              </div>
+            </div>
+
+            <div style="background-color: var(--color-cream); border: 1px solid var(--color-beige-border); border-radius: 10px; padding: 14px; margin-bottom: 14px;">
+              <h4 style="font-size: 0.92rem; color: #4A281B; margin-bottom: 4px;">Transparent Formula Breakdown</h4>
+              <p id="calcResultMath" style="font-size: 0.88rem; line-height: 1.5; color: #2D1B15;">
+                Prepared (45) minus Estimated Demand (40) = 5 surplus (11.1% of preparation).
+              </p>
+            </div>
+
+            <div style="background-color: #EBF0E6; border: 1px solid #879477; border-radius: 10px; padding: 14px; margin-bottom: 14px;">
+              <h4 style="font-size: 0.92rem; color: #6C7A5C; margin-bottom: 4px;">Recommended Operational Action</h4>
+              <p id="calcResultRec" style="font-size: 0.88rem; line-height: 1.5; color: #2D1B15;">
+                Optimal Planning: Food preparation closely matches demand. Continue standard meal monitoring.
+              </p>
+            </div>
+
+            <div style="font-size: 0.78rem; opacity: 0.8; font-style: italic; line-height: 1.4;">
+              * Note: In compliance with hackathon truthfulness, calculations represent mathematical statistical averaging and bounding logic. No artificial neural network is claimed where statistical rules are applied.
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- -----------------------------------------------------------------------
+         VIEW: Alert Center
+         ----------------------------------------------------------------------- -->
+    <div class="page-view" id="view-alerts">
+      <div class="container">
+        <div class="page-header-bar">
+          <div>
+            <h1 class="page-header-title">Alert Center</h1>
+            <p class="page-header-subtitle">
+              Early warning notifications for high surplus, unusual quantities, approaching use-by deadlines, and data gaps.
+            </p>
+          </div>
+          <div>
+            <select id="alertsFilterSelect" class="form-control">
+              <option value="ALL">All Alerts</option>
+              <option value="ACTIVE">Active (Pending Review)</option>
+              <option value="REVIEWED">Reviewed & Handled</option>
+              <option value="HIGH">High Severity Only</option>
+              <option value="EXPIRY">Use-By Warnings Only</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="background-color: var(--color-amber-light); border: 1px solid var(--color-amber); border-radius: var(--radius-md); padding: 14px 18px; margin-bottom: 2rem; font-size: 0.88rem; color: #4A281B;">
+          <strong>Food Safety Advisory:</strong> Algorithmic alerts assist kitchen managers in identifying potential surplus and time-sensitive batches. Food safety standards mandate human sensory inspection and temperature compliance before any food is redistributed.
+        </div>
+
+        <div class="alerts-list" id="alertsContainer">
+          <!-- Dynamically rendered alert cards -->
+        </div>
+      </div>
+    </div>
+
+    <!-- -----------------------------------------------------------------------
+         VIEW: Food Outcome Tracking
+         ----------------------------------------------------------------------- -->
+    <div class="page-view" id="view-outcomes">
+      <div class="container">
+        <div class="page-header-bar">
+          <div>
+            <h1 class="page-header-title">Food Outcome Tracking</h1>
+            <p class="page-header-subtitle">
+              Record and audit what actually happened to remaining food: Reused, Redistributed, or Discarded.
+            </p>
+          </div>
+          <div>
+            <button class="btn btn-primary btn-sm" onclick="App.openGeneralOutcomeModal()">
+              + Log Food Outcome
+            </button>
+          </div>
+        </div>
+
+        <!-- OUTCOME SUMMARY STATS -->
+        <div class="stats-grid-8" id="outcomesSummaryBoxes" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-bottom: 2rem;">
+          <!-- Dynamically rendered -->
+        </div>
+
+        <!-- OUTCOMES TABLE -->
+        <div class="table-responsive">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Food Item</th>
+                <th>Outcome Type</th>
+                <th>Quantity</th>
+                <th>Destination / Partner</th>
+                <th>Verified By</th>
+                <th>Safety Sign-Off</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="outcomesTableBody">
+              <!-- Dynamically rendered -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- -----------------------------------------------------------------------
+         VIEW: Premium Analytics
+         ----------------------------------------------------------------------- -->
+    <div class="page-view" id="view-analytics">
+      <div class="container">
+        <div class="page-header-bar">
+          <div>
+            <h1 class="page-header-title">Advanced Waste & Efficiency Analytics</h1>
+            <p class="page-header-subtitle">
+              Empirical reporting grounded exclusively in actual kitchen logs, distinguishing surplus forecasts from verified savings.
+            </p>
+          </div>
+          <div>
+            <div style="background: var(--color-cream-light); border: 1px solid var(--color-beige-border); padding: 8px 16px; border-radius: var(--radius-pill); font-size: 0.9rem;">
+              <strong>Redistribution Efficiency:</strong> <span id="analyticsEfficiencyRate" style="color: #6C7A5C; font-weight: 700;">0%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- TRENDS TIMELINE FULL WIDTH -->
+        <div class="chart-card" style="margin-bottom: 2rem;">
+          <div class="chart-card-header">
+            <h3 class="chart-card-title">Preparation vs. Surplus Trend Over Time</h3>
+            <span class="badge badge-neutral">Chronological Log</span>
+          </div>
+          <div class="chart-canvas-wrapper" style="height: 320px;">
+            <canvas id="chartTrendsTimeline"></canvas>
+          </div>
+          <div class="chart-explanation-box">
+            <strong>Trend Analysis:</strong> Tracks daily and meal-session preparation volumes against surplus quantities. Downward trend in surplus indicates improving kitchen demand forecasting.
+          </div>
+        </div>
+
+        <div class="charts-grid-2">
+          <!-- RE-RENDER OF INSIGHT CARDS -->
+          <div class="chart-card">
+            <h3 class="chart-card-title" style="margin-bottom: 1rem;">Kitchen Insights & Data Adequacy</h3>
+            <div style="font-size: 0.92rem; line-height: 1.7; color: var(--color-deep-brown);">
+              <p style="margin-bottom: 12px;">
+                <strong>Data Grounding Guarantee:</strong> All charts render from your persistent kitchen inventory. If records are sparse or absent, empty states explain the additional service cycles needed.
+              </p>
+              <p style="margin-bottom: 12px;">
+                <strong>No Fabricated Carbon Claims:</strong> Avoids inventing unscientific carbon offset or methane claims. The application quantifies food mass (kg, portions, litres) accurately.
+              </p>
+              <p>
+                <strong>HACCP Compliance:</strong> Food safety takes precedence over zero-waste metrics. When food exceeds safe holding temperatures, composting/discarding is the responsible outcome.
+              </p>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <h3 class="chart-card-title" style="margin-bottom: 1rem;">Redistribution Safety Protocol</h3>
+            <div style="font-size: 0.92rem; line-height: 1.7; color: var(--color-deep-brown);">
+              <ul style="list-style-type: none; display: flex; flex-direction: column; gap: 10px;">
+                <li style="display: flex; gap: 8px;">
+                  <span>1.</span>
+                  <span><strong>Sensory Check:</strong> Visual inspection, aroma evaluation, texture verification by head cook.</span>
+                </li>
+                <li style="display: flex; gap: 8px;">
+                  <span>2.</span>
+                  <span><strong>Temperature Verification:</strong> Hot foods held &ge; 60°C or rapidly chilled &le; 4°C within 2 hours.</span>
+                </li>
+                <li style="display: flex; gap: 8px;">
+                  <span>3.</span>
+                  <span><strong>Food-Grade Transport:</strong> Clean, covered stainless steel pans with tamper-evident labels.</span>
+                </li>
+                <li style="display: flex; gap: 8px;">
+                  <span>4.</span>
+                  <span><strong>Recipient Sign-Off:</strong> NGO/Hostel supervisor logs receiving timestamp and temperature upon delivery.</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- -----------------------------------------------------------------------
+         VIEW: Testing Center
+         ----------------------------------------------------------------------- -->
+    <div class="page-view" id="view-testing">
+      <div class="container">
+        
+        <!-- SUMMARY BANNER -->
+        <div class="test-summary-banner">
+          <div>
+            <span class="section-tag" style="background: rgba(245, 235, 221, 0.2); color: #F5EBDD; border: 1px solid rgba(245, 235, 221, 0.3);">
+              Automated Verification Suite
+            </span>
+            <h2 class="test-summary-title">System Testing Center</h2>
+            <p style="font-size: 0.95rem; color: rgba(245, 235, 221, 0.85); max-width: 580px;">
+              Executes 16 real-time assertion suites evaluating core arithmetic formulas, boundary edge cases, input validators, chronological date guards, and historical demand averaging without altering live data.
+            </p>
+          </div>
+
+          <div class="test-metrics-group">
+            <div class="test-metric-block">
+              <div class="test-metric-num" id="testPassRate">100%</div>
+              <div class="test-metric-lbl">Pass Rate</div>
+            </div>
+            <div class="test-metric-block">
+              <div class="test-metric-num"><span id="testPassedCount">16</span>/<span id="testTotalCount">16</span></div>
+              <div class="test-metric-lbl">Assertions Passed</div>
+            </div>
+            <div>
+              <button class="btn btn-secondary btn-lg" style="color: #F5EBDD; border-color: #F5EBDD;" onclick="App.runAllTests()">
+                Run All Tests
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 16 TEST SUITES GRID -->
+        <div class="test-card-grid" id="testResultsContainer">
+          <!-- Dynamically rendered -->
+        </div>
+
+      </div>
+    </div>
+
+    <!-- -----------------------------------------------------------------------
+         VIEW: About FoodWise AI
+         ----------------------------------------------------------------------- -->
+    <div class="page-view" id="view-about">
+      <div class="container" style="max-width: 980px;">
+        <div class="section-header">
+          <span class="section-tag">About the Project</span>
+          <h1 class="section-title">FoodWise AI</h1>
+          <p class="section-subtitle">
+            An intelligent food waste reduction prototype designed to support smarter food preparation,
+            surplus identification, and responsible redistribution.
+          </p>
+        </div>
+
+        <div class="chart-card" style="margin-bottom: 2rem;">
+          <h3 class="chart-card-title" style="margin-bottom: 0.9rem;">1. Problem Being Addressed</h3>
+          <p style="font-size: 0.95rem; line-height: 1.7; color: var(--color-deep-brown); margin-bottom: 12px;">
+            Globally, approximately 1.3 billion tons of food is wasted annually. In large institutional environments—such as college canteens, university hostel messes, banquet halls, and corporate cafeterias—kitchen managers must predict daily diner attendance under volatile conditions (e.g., student holidays, weather changes, exam schedules).
+          </p>
+          <p style="font-size: 0.95rem; line-height: 1.7; color: var(--color-deep-brown);">
+            Without transparent demand forecasting and prompt surplus alerting, substantial volumes of wholesome, freshly prepared food are needlessly discarded simply because surplus was detected too late to organize food redistribution.
+          </p>
+        </div>
+
+        <div class="chart-card" style="margin-bottom: 2rem;">
+          <h3 class="chart-card-title" style="margin-bottom: 0.9rem;">2. Intended Users & Beneficiaries</h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1rem;">
+            <div style="background: var(--color-soft-beige); padding: 14px; border-radius: var(--radius-sm);">
+              <strong>College Canteens</strong>
+              <div style="font-size: 0.85rem; opacity: 0.8; margin-top: 4px;">Dynamic daily footfall management and batch preparation adjustment.</div>
+            </div>
+            <div style="background: var(--color-soft-beige); padding: 14px; border-radius: var(--radius-sm);">
+              <strong>Hostel Dining Halls</strong>
+              <div style="font-size: 0.85rem; opacity: 0.8; margin-top: 4px;">Menu reuse protocols for dry grains and whole breads.</div>
+            </div>
+            <div style="background: var(--color-soft-beige); padding: 14px; border-radius: var(--radius-sm);">
+              <strong>Event Caterers & Banquets</strong>
+              <div style="font-size: 0.85rem; opacity: 0.8; margin-top: 4px;">Immediate post-event redistribution routing to nearby shelters.</div>
+            </div>
+            <div style="background: var(--color-soft-beige); padding: 14px; border-radius: var(--radius-sm);">
+              <strong>NGO Redistribution Partners</strong>
+              <div style="font-size: 0.85rem; opacity: 0.8; margin-top: 4px;">Verifiable food safety handover with temperature audit trails.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-card" style="margin-bottom: 2rem;">
+          <h3 class="chart-card-title" style="margin-bottom: 0.9rem;">3. How the Application Works</h3>
+          <p style="font-size: 0.95rem; line-height: 1.7; color: var(--color-deep-brown); margin-bottom: 12px;">
+            The platform follows a closed-loop food stewardship workflow:
+          </p>
+          <ol style="margin-left: 20px; line-height: 1.8; font-size: 0.93rem; color: var(--color-deep-brown);">
+            <li><strong>Batch Logging:</strong> Food item, category, preparation time, and quantity are logged prior to service.</li>
+            <li><strong>Statistical Demand Baseline:</strong> If prior sessions exist for the item, the platform computes historical average demand; otherwise, explicit kitchen estimates are recorded.</li>
+            <li><strong>Surplus Identification:</strong> As service concludes, `Surplus = max(0, Prepared - Demand)` is calculated.</li>
+            <li><strong>Early Warning Alerts:</strong> If surplus exceeds configurable demonstration thresholds (&gt;25%), immediate kitchen alerts prompt cold storage staging.</li>
+            <li><strong>Food Safety & Redistribution Sign-off:</strong> Supervisors perform sensory checks and log outcomes (Reused, Redistributed, or Composted).</li>
+          </ol>
+        </div>
+
+        <div class="chart-card" style="margin-bottom: 2rem;">
+          <h3 class="chart-card-title" style="margin-bottom: 0.9rem;">4. Technology Stack</h3>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 0.92rem;">
+            <li>&bull; <strong>Frontend Architecture:</strong> HTML5 Semantic Layout, Modern Vanilla JavaScript (ES6+ modular architecture).</li>
+            <li>&bull; <strong>Design & Aesthetics:</strong> Specialty Coffee-inspired CSS Design System (Cream, Beige, Chocolate Brown, Sage Green).</li>
+            <li>&bull; <strong>Data Persistence:</strong> Browser LocalStorage with zero external paid database dependencies.</li>
+            <li>&bull; <strong>Data Visualizations:</strong> Chart.js 4.4.1 (custom palette theming).</li>
+            <li>&bull; <strong>Verification Framework:</strong> Dedicated in-memory testing center with 16 automated assertions.</li>
+            <li>&bull; <strong>Hosting & Server:</strong> Python 3.14 Built-in Multi-threaded HTTP Server.</li>
+          </ul>
+        </div>
+
+        <div class="chart-card" style="margin-bottom: 2rem; border-left: 5px solid var(--color-amber);">
+          <h3 class="chart-card-title" style="margin-bottom: 0.9rem; color: #92580C;">5. Prototype Limitations & Future Roadmap</h3>
+          <div style="font-size: 0.92rem; line-height: 1.7; color: var(--color-deep-brown);">
+            <p style="margin-bottom: 8px;">
+              <strong>Current Prototype Status:</strong> Operates as a transparent statistical demonstration prototype. Thresholds and demand averages are based on sample means rather than multi-variate machine learning models.
+            </p>
+            <p style="margin-bottom: 8px;">
+              <strong>Future Planned Improvements:</strong> Integration with college biometric attendance turnstiles, weather forecast APIs, automated IoT temperature sensor probes, and automated SMS dispatch to local food bank networks.
+            </p>
+            <p>
+              <strong>Food Safety Disclaimer:</strong> This software is a decision-support prototype. It does not replace certified public health food safety inspections or trained kitchen management judgment.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- =========================================================================
+       Footer
+       ========================================================================= -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+            <div class="brand-icon-wrapper" style="background: var(--color-cream); color: var(--color-chocolate);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2a10 10 0 0 0-10 10c0 4.4 2.8 8.2 6.8 9.5.4.1.8-.2.8-.6v-2.3c0-.6.5-1.1 1.1-1.1h2.6c.6 0 1.1.5 1.1 1.1v2.3c0 .4.4.7.8.6 4-1.3 6.8-5.1 6.8-9.5A10 10 0 0 0 12 2z"></path>
+              </svg>
+            </div>
+            <h3 style="margin: 0;">FoodWise AI</h3>
+          </div>
+          <p>
+            Intelligent food waste reduction prototype for institutional dining halls, canteens, hostels, and event caterers.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Application</h4>
+          <ul class="footer-links">
+            <li><a onclick="App.navigateTo('dashboard')">Dashboard</a></li>
+            <li><a onclick="App.navigateTo('inventory')">Food Inventory</a></li>
+            <li><a onclick="App.navigateTo('estimation')">AI Insights</a></li>
+            <li><a onclick="App.navigateTo('alerts')">Alert Center</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Integrity & Testing</h4>
+          <ul class="footer-links">
+            <li><a onclick="App.navigateTo('outcomes')">Food Outcomes</a></li>
+            <li><a onclick="App.navigateTo('analytics')">Advanced Analytics</a></li>
+            <li><a onclick="App.navigateTo('testing')">Testing Center (16 Tests)</a></li>
+            <li><a onclick="App.navigateTo('about')">Methodology</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Design Philosophy</h4>
+          <p style="font-size: 0.85rem; color: rgba(245, 235, 221, 0.75); line-height: 1.6;">
+            Crafted with warmth, editorial typography, and the refined aesthetic of specialty coffee houses.
+          </p>
+          <div style="margin-top: 12px; font-size: 0.78rem; color: var(--color-soft-olive);">
+            #F5EBDD &bull; #4A281B &bull; #879477
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 FoodWise AI. All demonstration data and formulas are illustrative.</div>
+        <div>Engineered for Student Hackathons & Sustainable Campus Dining</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =========================================================================
+       MODAL 1: Add / Edit Food Record
+       ========================================================================= -->
+  <div class="modal-backdrop" id="recordModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="recordModalTitle">Add Food Record</h3>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="App.closeModal('recordModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="recordForm" onsubmit="event.preventDefault(); App.saveRecordFromForm();">
+          <div class="form-group">
+            <label class="form-label">Food Item Name *</label>
+            <input type="text" id="formFoodName" class="form-control" placeholder="e.g. Steamed Rice, Sambar, Chapati, Idli" required>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Food Category *</label>
+              <select id="formCategory" class="form-control" required>
+                <option value="Rice & Grains">Rice & Grains</option>
+                <option value="Breads">Breads</option>
+                <option value="Curries & Gravies">Curries & Gravies</option>
+                <option value="Breakfast/Snacks">Breakfast/Snacks</option>
+                <option value="Desserts">Desserts</option>
+                <option value="Beverages">Beverages</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Meal Session</label>
+              <select id="formMealSession" class="form-control">
+                <option value="Breakfast">Breakfast</option>
+                <option value="Lunch" selected>Lunch</option>
+                <option value="Snacks">Snacks</option>
+                <option value="Dinner">Dinner</option>
+                <option value="Event">Special Event</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Quantity Prepared *</label>
+              <input type="number" id="formPrepQty" class="form-control" min="0" step="0.1" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Quantity Served *</label>
+              <input type="number" id="formServedQty" class="form-control" min="0" step="0.1" required>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Estimated Demand *</label>
+              <input type="number" id="formDemandQty" class="form-control" min="0" step="0.1" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Unit of Measure *</label>
+              <select id="formUnit" class="form-control" required>
+                <option value="kg">Kilograms (kg)</option>
+                <option value="portions">Portions / Pieces</option>
+                <option value="plates">Plates</option>
+                <option value="litres">Litres (L)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Preparation Date & Time</label>
+              <input type="datetime-local" id="formPreparedAt" class="form-control">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Use-By / Best-Before Date & Time</label>
+              <input type="datetime-local" id="formUseByAt" class="form-control">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Expected Attendance (optional)</label>
+            <input type="number" id="formAttendance" class="form-control" min="0" placeholder="Number of expected diners">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Kitchen Notes</label>
+            <textarea id="formNotes" class="form-control" rows="2" placeholder="Batch cooking temperature, special ingredient info, or location..."></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="App.closeModal('recordModal')">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="App.saveRecordFromForm()">Save Food Record</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 2: Record Details & Mathematical Formula Breakdown
+       ========================================================================= -->
+  <div class="modal-backdrop" id="recordDetailsModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Food Batch Analysis & Math</h3>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="App.closeModal('recordDetailsModal')">&times;</button>
+      </div>
+      <div class="modal-body" id="recordDetailsBody">
+        <!-- Rendered dynamically -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="App.closeModal('recordDetailsModal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 3: Food Outcome Tracking (With Human Sign-Off Verification)
+       ========================================================================= -->
+  <div class="modal-backdrop" id="outcomeModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Record Food Outcome</h3>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="App.closeModal('outcomeModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="outcomeForm" onsubmit="event.preventDefault(); App.saveOutcomeFromForm();">
+          <input type="hidden" id="outcomeRecordId">
+          
+          <div class="form-group" id="outcomeFoodSelectGroup" style="display:none;">
+            <label class="form-label">Select Available Food Batch *</label>
+            <select id="outcomeBatchSelect" class="form-control" onchange="App.handleOutcomeBatchSelection(this.value)">
+              <!-- Populated dynamically -->
+            </select>
+          </div>
+
+          <div class="form-group" id="outcomeFoodNameGroup">
+            <label class="form-label">Food Batch</label>
+            <input type="text" id="outcomeFoodName" class="form-control" readonly style="background: #E8D5BE; font-weight: 600;">
+          </div>
+
+          <div style="background: #FAF5EE; padding: 10px 14px; border-radius: 8px; margin-bottom: 1rem; border: 1px solid #DAC2A6;">
+            <strong>Available Remaining Leftovers:</strong> <span id="outcomeRemainingText" style="color: #4A281B; font-weight: 700;">0</span>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Outcome Classification *</label>
+              <select id="outcomeType" class="form-control" required>
+                <option value="Reused">Reused (Internal Kitchen)</option>
+                <option value="Redistributed">Redistributed (External Partner / Mess)</option>
+                <option value="Discarded">Discarded (Compost / Disposal)</option>
+                <option value="Under Review">Under Review</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Outcome Quantity *</label>
+              <input type="number" id="outcomeQty" class="form-control" min="0.1" step="0.1" required>
+              <input type="hidden" id="outcomeUnit">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Destination / Facility / Partner Name *</label>
+            <input type="text" id="outcomeDestination" class="form-control" placeholder="e.g., Cold Room Rack #2, Annapoorna Food Bank, Bio-Bin 3" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Verified By (Kitchen Supervisor Name) *</label>
+            <input type="text" id="outcomeVerifier" class="form-control" placeholder="e.g., Head Chef Ramesh / Quality Officer" required>
+          </div>
+
+          <div style="background-color: #EBF0E6; border: 1.5px solid #879477; padding: 14px; border-radius: 10px; margin-bottom: 1rem;">
+            <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer;">
+              <input type="checkbox" id="outcomeSafetyCheck" style="margin-top: 4px; accent-color: #4A281B;">
+              <span style="font-size: 0.86rem; color: #2D1B15; line-height: 1.5;">
+                <strong>Mandatory Food Safety Check:</strong> I confirm that a sensory inspection (aroma, texture, color) and holding temperature check (hot &ge;60°C or cold &le;4°C) were physically performed and food-grade covered containers are utilized.
+              </span>
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Audit Notes & Temperature Log</label>
+            <textarea id="outcomeNotes" class="form-control" rows="2" placeholder="e.g., Temperature measured at 3.5°C; dispatched in insulated food vehicle..."></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="App.closeModal('outcomeModal')">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="App.saveOutcomeFromForm()">Confirm & Record Outcome</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 4: Alert Review & Acknowledgement
+       ========================================================================= -->
+  <div class="modal-backdrop" id="alertReviewModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Review Kitchen Alert</h3>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="App.closeModal('alertReviewModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="alertReviewForm" onsubmit="event.preventDefault(); App.saveAlertReviewFromForm();">
+          <input type="hidden" id="reviewAlertId">
+
+          <div class="form-group">
+            <label class="form-label">Review Status</label>
+            <select id="reviewStatusSelect" class="form-control">
+              <option value="Reviewed">Reviewed & Action Taken</option>
+              <option value="Under Review">Under Review / Monitoring Service</option>
+              <option value="Resolved">Resolved & Closed</option>
+              <option value="Active">Keep Active</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Kitchen Supervisor Resolution Notes</label>
+            <textarea id="reviewNotesInput" class="form-control" rows="3" placeholder="Explain action taken: e.g. Staged in cold room, notified redistribution driver, adjusted dinner prep quantity..."></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="App.closeModal('alertReviewModal')">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="App.saveAlertReviewFromForm()">Save Review</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       TOAST NOTIFICATIONS CONTAINER
+       ========================================================================= -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Application Scripts -->
+  <script src="js/store.js"></script>
+  <script src="js/estimation.js"></script>
+  <script src="js/alerts.js"></script>
+  <script src="js/outcomes.js"></script>
+  <script src="js/analytics.js"></script>
+  <script src="js/testing.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>

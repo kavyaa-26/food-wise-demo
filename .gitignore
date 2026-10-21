@@ -1,0 +1,12 @@
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Temporary dumps & logs
+dom_dump.html
+*.log
+
+# OS metadata
+.DS_Store
+Thumbs.db
